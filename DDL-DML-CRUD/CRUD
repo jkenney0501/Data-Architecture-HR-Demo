@@ -1,0 +1,100 @@
+/****************************************************************************
+
+Question 1: Return a list of employees with Job Titles and Department Names.
+
+****************************************************************************/
+SELECT 
+E.EMP_ID,
+E.EMP_NM,
+J.JOB_TITLE,
+D.DEPARTMENT_NAME
+FROM EMP_MAP EM
+JOIN EMPLOYEE E ON EM.EMP_ID = E.EMP_ID
+JOIN JOB_TITLE J ON EM.JOB_ID = J.JOB_ID
+JOIN DEPARTMENT D ON EM.DEPARTMENT_ID = D.DEPARTMENT_ID;
+
+
+
+
+/****************************************************************************
+
+Question 2: Insert Web Programmer as a new job title.
+
+****************************************************************************/
+INSERT INTO JOB_TITLE (JOB_TITLE)
+VALUES ('Web Programmer');
+
+SELECT * FROM JOB_TITLE;
+
+
+
+
+/****************************************************************************
+
+Question 3: Correct the job title from web programmer to web developer.
+
+****************************************************************************/
+UPDATE JOB_TITLE
+SET JOB_TITLE = 'Web Developer'
+WHERE JOB_TITLE = 'Web Programmer';
+
+SELECT * FROM JOB_TITLE;
+
+
+
+/****************************************************************************
+
+Question 4: Delete the job title Web Developer from the database.
+
+****************************************************************************/
+DELETE FROM JOB_TITLE
+WHERE JOB_TITLE = 'Web Developer';
+
+SELECT * FROM JOB_TITLE;
+
+/****************************************************************************
+
+Question 5: How many employees are in each department?
+
+****************************************************************************/
+SELECT 
+D.DEPARTMENT_NAME,
+COUNT(DISTINCT E.EMP_ID) AS DEPT_EMP_COUNTS
+FROM EMP_MAP EM
+JOIN EMPLOYEE E ON EM.EMP_ID = E.EMP_ID 
+JOIN DEPARTMENT D ON EM.DEPARTMENT_ID = D.DEPARTMENT_ID
+GROUP BY D.DEPARTMENT_NAME
+ORDER BY DEPT_EMP_COUNTS DESC;
+
+
+
+/****************************************************************************
+
+Question 6: Write a query that returns current and past jobs 
+(include employee name, job title, department, manager name, start and end date for position) 
+for employee Toni Lembeck.
+
+****************************************************************************/
+
+SELECT 
+E.EMP_NM,
+J.JOB_TITLE,
+D.DEPARTMENT_NAME,
+M.EMP_NM AS MANAGER,
+EM.START_DT,
+EM.END_DT
+FROM EMP_MAP EM
+JOIN EMPLOYEE E ON EM.EMP_ID = E.EMP_ID
+JOIN EMPLOYEE M ON EM.MANAGER_ID = M.EMP_ID
+JOIN JOB_TITLE J ON EM.JOB_ID = J.JOB_ID
+JOIN DEPARTMENT D ON EM.DEPARTMENT_ID = D.DEPARTMENT_ID
+WHERE E.EMP_NM IN ('Toni Lembeck');
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,165 @@
+/*********************************************
+-- Employee DDL
+*********************************************/
+CREATE TABLE employee (
+	emp_id VARCHAR(20) PRIMARY KEY,
+	emp_nm VARCHAR(50),
+	email VARCHAR(50),
+	hire_dt DATE
+);
+
+-- DML for ETL process
+insert into employee(emp_id, emp_nm,email, hire_dt)
+select DISTINCT emp_id, emp_nm, email, hire_dt from proj_stg;
+
+select * from employee;
+
+
+/*********************************************
+-- Job Title DDL
+*********************************************/
+CREATE TABLE job_title (
+	job_id SERIAL PRIMARY KEY,
+	job_title VARCHAR(50)
+);
+
+-- Job Title DML
+insert into job_title (job_title)
+select distinct job_title from proj_stg;
+
+select * from job_title
+
+
+
+/*********************************************
+-- Department DDL
+*********************************************/
+CREATE TABLE department (
+	department_id SERIAL PRIMARY KEY,
+	department_name VARCHAR(50)
+);
+
+--Dept DML
+insert into department(department_name)
+SELECT DISTINCT department_nm from proj_stg;
+
+select * from department;
+
+
+
+/*********************************************
+-- Education DDL
+*********************************************/
+CREATE TABLE education (
+	education_id SERIAL PRIMARY KEY,
+	education_lvl VARCHAR(50)
+);
+
+-- Edu DML
+insert into education(education_lvl)
+SELECT DISTINCT education_lvl from proj_stg;
+
+select * from education;
+
+
+
+
+/*********************************************
+-- Salary DDL
+*********************************************/
+CREATE TABLE Salary (
+	salary_id SERIAL PRIMARY KEY,
+	salary INT
+);
+
+-- Salary DML
+insert into salary(salary)
+SELECT DISTINCT salary from proj_stg;
+
+select * from salary;
+
+
+
+/*********************************************
+--Location DDL
+--drop table location_nm;
+*********************************************/
+drop table location_nm;
+
+CREATE TABLE location_nm (
+	location_id SERIAL PRIMARY KEY,
+	location VARCHAR(50),
+	state VARCHAR(20),
+	city VARCHAR(30),
+	address VARCHAR(50)
+);
+
+--Location DML
+insert into location_nm(location, state, city, address)
+SELECT DISTINCT location, state, city, address from proj_stg;
+
+select * from location_nm;
+
+
+
+
+
+
+/*********************************************
+-- Mapping Table DDL
+
+-- history/MAP table for employees DDL
+--drop table emp_map;
+*********************************************/
+
+
+CREATE TABLE emp_map(
+	emp_id VARCHAR(20) references employee(emp_id),
+	job_id INT references job_title(job_id),
+	department_id INT references department(department_id), 
+	manager_id VARCHAR(20) references employee(emp_id),
+	location_id INT references location_nm(location_id),
+	education_id INT references education(education_id),
+	salary_id INT references salary(salary_id),
+	start_dt DATE,
+	end_dt DATE,
+	PRIMARY KEY(emp_id, job_id)
+);
+
+
+-- emp map DML
+insert into emp_map(
+	emp_id, 
+	job_id,
+	department_id, 
+	manager_id,
+	location_id,
+	education_id,
+	salary_id,
+	start_dt,
+	end_dt
+)
+
+
+select distinct
+e.emp_id, 
+j.job_id, 
+d.department_id, 
+(SELECT EMP_ID FROM employee WHERE emp_nm = p.manager), 
+l.location_id, 
+edu.education_id, 
+s.salary_id, 
+p.start_dt, 
+p.end_dt
+from proj_stg p
+join employee e on p.emp_id = e.emp_id
+join job_title j on p.job_title = j.job_title
+join department d on p.department_nm = d.department_name 
+join location_nm l on p.location = l.location
+join education edu on p.education_lvl = edu.education_lvl
+join salary s on p.salary = s.salary;
+
+
+
+select * from emp_map;
+

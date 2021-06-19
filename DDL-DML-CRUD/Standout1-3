@@ -1,0 +1,68 @@
+/*****************************************************
+Create a view that returns all employee attributes; 
+results should resemble initial Excel file
+*****************************************************/
+CREATE VIEW HR_MANAGER_REPORT AS
+
+SELECT DISTINCT
+E.EMP_ID,
+E.EMP_NM,
+E.EMAIL,
+E.HIRE_DT,
+J.JOB_TITLE,
+S.SALARY,
+D.DEPARTMENT_NAME AS DEPARTMENT,
+M.EMP_NM AS MANAGER,
+EM.START_DT,
+EM.END_DT,
+L.LOCATION,
+L.ADDRESS,
+L.CITY,
+L.STATE,
+EDU.EDUCATION_LVL
+FROM EMP_MAP EM
+JOIN EMPLOYEE E ON EM.EMP_ID = E.EMP_ID
+JOIN EMPLOYEE M ON EM.MANAGER_ID = M.EMP_ID
+JOIN JOB_TITLE J ON EM.JOB_ID = J.JOB_ID
+JOIN DEPARTMENT D ON EM.DEPARTMENT_ID = D.DEPARTMENT_ID
+JOIN SALARY S ON EM.SALARY_ID = S.SALARY_ID
+JOIN LOCATION_NM L ON EM.LOCATION_ID = L.LOCATION_ID
+JOIN EDUCATION EDU ON EM.EDUCATION_ID = EDU.EDUCATION_ID;
+
+SELECT * FROM HR_MANAGER_REPORT;
+
+
+/*******************************************************
+Create a stored procedure with parameters that returns current and past jobs 
+(include employee name, job title, department, manager name, start and end date for position) when given an employee name.
+
+--using Toni Lembeck as the parameter value
+*******************************************************/
+CREATE FUNCTION EMP_HIST (EMP_NM)
+LANGUAGE 'plpgsql'
+AS $BODY$
+DECLARE
+BEGIN
+SELECT 
+E.EMP_NM,
+J.JOB_TITLE,
+D.DEPARTMENT_NAME,TONI
+M.EMP_NM AS MANAGER,
+EM.START_DT,
+EM.END_DT
+FROM EMP_MAP EM
+JOIN EMPLOYEE E ON EM.EMP_ID = E.EMP_ID
+JOIN EMPLOYEE M ON EM.MANAGER_ID = M.EMP_ID
+JOIN JOB_TITLE J ON EM.JOB_ID = J.JOB_ID
+JOIN DEPARTMENT D ON EM.DEPARTMENT_ID = D.DEPARTMENT_ID
+--WHERE E.EMP_NM IN ('Toni Lembeck');
+END;
+$BODY$;
+
+CALL EMP_HIST('Toni Lembeck')
+
+
+
+/*****************************************************
+Implement user security on the restricted salary attribute.
+******************************************************/
