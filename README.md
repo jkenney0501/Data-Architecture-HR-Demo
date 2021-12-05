@@ -11,3 +11,12 @@ An example of an HR database design with entity relationship diagrams (conceptua
 ### HR Database Build
  - [Stage Script](https://github.com/jkenney0501/Data-Architecture-HR-Demo/blob/main/HR%20Database%20Script/HR_Stage_Script)
 
+### DML & DDL
+- [DML-DDL SQL](https://github.com/jkenney0501/Data-Architecture-HR-Demo/blob/main/DDL-DML-CRUD/DDL-DML%20Tables)
+
+### CRUD
+- [CRUD SQL](https://github.com/jkenney0501/Data-Architecture-HR-Demo/blob/main/DDL-DML-CRUD/CRUD)
+
+### Create a View
+- [View SQL](https://github.com/jkenney0501/Data-Architecture-HR-Demo/blob/main/DDL-DML-CRUD/Standout1-3)
+
